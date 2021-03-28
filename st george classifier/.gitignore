@@ -1,0 +1,5 @@
+# dataset
+data
+
+# helps to presize the data to save time during traning
+# resize_data_to_256_smallest.py

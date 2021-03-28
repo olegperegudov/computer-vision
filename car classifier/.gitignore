@@ -1,0 +1,15 @@
+# image files for testing and debugging
+data
+
+# name generator for the files. I used it to rename all the image files. It took ~10 mins or more to rename everything
+# rename was needed because shutil.copy(old_name, new_name) will copy/rewrite the file if the name is the same
+# name_generator.py
+
+# lets you quickly dl images from bing and put them inside query folder (basically it is simplified version of "making_image_dataset.ipynb"
+# downloader.py
+
+# a few extra functions for debugging
+utils.py
+
+# virtual env
+venv
