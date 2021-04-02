@@ -2,11 +2,11 @@ def name_generator(size=10, chars=string.ascii_letters + string.digits):
     """This will rename all image files with random names.
 
     Args:
-        size (int, optional): lenght of the generated name. Defaults to 10.
-        chars ([type], optional): what chars to use. Defaults to string.ascii_letters+string.digits.
+        size ([int], optional): lenght of the generated name. Defaults to 10.
+        chars ([str], optional): what chars to use. Defaults to string.ascii_letters+string.digits.
 
     Returns:
-        [type]: returns a random string of size=size
+        [str]: returns a random string of size=size
     """
     return ''.join(random.choice(chars) for _ in range(size))
 
