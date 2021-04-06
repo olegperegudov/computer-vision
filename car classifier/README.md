@@ -14,8 +14,8 @@ This pet project aims to classify cars (or anything if you feed it images). Prim
 - ROC AUC was used as a metric
 
 ## how to run:
-- you can run the classifier directly from kaggle (turn on gpu): https://www.kaggle.com/gobsan/car-classifier-torch
-- or you can open "5_inference.ipynb" file and add urls to url list to classify (there are a few urls already). Run all. You will need all the dependencies (Pipfile) and "checkpoint.pth" (in the same folder).
+- the classifier can be run directly from kaggle (turn on gpu): https://www.kaggle.com/gobsan/car-classifier-torch
+- inference - "5_inference.ipynb" file can be run locally. Add urls to url list to classify (there are a few urls already). Run all. You will need all the dependencies (Pipfile) and "checkpoint.pth" (in the same folder).
 
 ## notes:
 - Please pay attention to '/' and '\\'. Make sure you use the right one for your OS.
