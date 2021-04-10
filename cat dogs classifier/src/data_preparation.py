@@ -1,19 +1,20 @@
 import os
 import pandas as pd
+from pathlib import Path
 
 # we will populate this predefined table
 df = pd.DataFrame(columns=['fname', 'info', 'xmin',
                            'ymin', 'xmax', 'ymax', 'label'])
 
 # setting paths
-ROOT = os.getcwd()
-DATA = os.path.join(ROOT, 'data')
+ROOT = Path.cwd().parent
+INPUT = os.path.join(ROOT, 'input')
 
 # walking image folder and constructing the df
 image_fnames = []
 image_info = []
 
-for _, _, fnames in os.walk(DATA):
+for _, _, fnames in os.walk(INPUT):
     for fname in fnames:
         extension = fname.split(".")[-1].lower()
         # we will need full path + fname later
@@ -21,13 +22,13 @@ for _, _, fnames in os.walk(DATA):
             image_fnames.append(fname)
         # extract data from the txt file
         if extension == "txt":
-            FILE_PATH = os.path.join(DATA, fname)
+            FILE_PATH = os.path.join(INPUT, fname)
             with open(FILE_PATH) as file:
                 txt = file.readlines()
                 image_info.append(txt)
 
 # pushing the data collected with os.walk to the df
-df['fname'] = [(DATA+fname) for fname in image_fnames]
+df['fname'] = [(INPUT+fname) for fname in image_fnames]
 df['info'] = image_info
 
 # parsing the string data. Making the df pretty
@@ -64,5 +65,5 @@ total_dogs = df[df.label == 0].shape[0]
 
 # safe the new df
 fname = 'train_data'
-df.to_csv(fname + '.csv')
+df.to_csv(os.path.join(INPUT, fname + '.csv'))
 print(f'File {fname}.csv with {total_cats} cats and {total_dogs} dogs created at working dir.')

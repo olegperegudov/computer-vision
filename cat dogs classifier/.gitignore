@@ -1,5 +1,10 @@
 # data files for training
 data
+input
+
+
+# a few helper nb
+notebooks
 
 # df with fnames, bbox coordinates and labels
 # train_data.csv
