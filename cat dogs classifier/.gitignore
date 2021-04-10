@@ -1,2 +1,5 @@
 # data files for training
 data
+
+# df with fnames, bbox coordinates and labels
+# train_data.csv
