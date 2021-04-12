@@ -43,7 +43,7 @@ def alexnet(input_layer=2):
     return model
 
 
-def resnet18_output_1(output_layer=1):
+def resnet18_5(output_layer=5):
     # load the pretrainded model
     model = models.resnet18(pretrained=True)
     # # freeze all params

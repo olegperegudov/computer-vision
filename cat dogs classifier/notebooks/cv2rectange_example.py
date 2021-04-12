@@ -1,20 +1,25 @@
 import cv2
 import pandas as pd
+import numpy as np
 
 import config
 
 # dataframe
-df = pd.read_csv(config.DF_PATH, usecols=[1, 3, 4, 5, 6, 7])
+df = pd.read_csv(config.DF_PATH, usecols=['fname', 'height', 'width',
+                                          'xmin', 'ymin', 'xmax', 'ymax', 'label'])
+
+# chekc random picture
+idx = np.random.randint(df.shape[0])
 # take any row
-img_data = df.iloc[0]
+img_data = df.iloc[idx]
 # image path
-path = img_data[0]
+path = img_data['fname']
 img = cv2.imread(path)
 # rectangle coordinates
-x1 = img_data[1]
-y1 = img_data[2]
-x2 = img_data[3]
-y2 = img_data[4]
+x1 = img_data['xmin']
+y1 = img_data['ymin']
+x2 = img_data['xmax']
+y2 = img_data['ymax']
 # extra params
 color = (255, 0, 0)
 thickness = 2

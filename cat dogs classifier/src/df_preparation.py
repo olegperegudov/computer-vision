@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import cv2
 from pathlib import Path
 from sklearn.model_selection import StratifiedKFold
 import config
@@ -32,22 +33,30 @@ def create_folds(data, n_splits=5, shuffle=True):
 if __name__ == "__main__":
 
     # we will populate this predefined table later
-    df = pd.DataFrame(columns=['fname', 'info', 'xmin',
-                               'ymin', 'xmax', 'ymax', 'label'])
+    df = pd.DataFrame(columns=['fname', 'height', 'width', 'info', 
+                               'xmin_coco', 'ymin_coco', 'xmax_coco', 'ymax_coco',
+                               'xmin_alb', 'ymin_alb', 'xmax_alb', 'ymax_alb', 
+                               'label'])
 
     # walking image folder and constructing the df
     image_fnames = []
     image_info = []
+    image_height = []
+    image_width = []
 
     for _, _, fnames in os.walk(config.DATA):
         for fname in fnames:
             extension = fname.split(".")[-1].lower()
+            FILE_PATH = os.path.join(config.DATA, fname)
             # we will need full path + fname later
             if extension == 'jpg':
+                img = cv2.imread(FILE_PATH)
+                h, w, _ = img.shape
+                image_height.append(h)
+                image_width.append(w)
                 image_fnames.append(fname)
             # extract data from the txt file
             if extension == "txt":
-                FILE_PATH = os.path.join(config.DATA, fname)
                 with open(FILE_PATH) as file:
                     txt = file.readlines()
                     image_info.append(txt)
@@ -56,29 +65,38 @@ if __name__ == "__main__":
     df['fname'] = [(os.path.join(config.DATA, fname))
                    for fname in image_fnames]
     df['info'] = image_info
+    df['height'] = image_height
+    df['width'] = image_width
 
     # creating empty future columns' data
-    xmin_list = []
-    ymin_list = []
-    xmax_list = []
-    ymax_list = []
+    xmin_coco_list = []
+    ymin_coco_list = []
+    xmax_coco_list = []
+    ymax_coco_list = []
     label_list = []
 
     # parsing the string data
     for row in df['info']:
         for txt in row:
             splitted_text = txt.split(' ')
-            xmin_list.append(int(splitted_text[1]))
-            ymin_list.append(int(splitted_text[2]))
-            xmax_list.append(int(splitted_text[3]))
-            ymax_list.append(int(splitted_text[4]))
+            xmin_coco_list.append(int(splitted_text[1]))
+            ymin_coco_list.append(int(splitted_text[2]))
+            xmax_coco_list.append(int(splitted_text[3]))
+            ymax_coco_list.append(int(splitted_text[4]))
             label_list.append(int(splitted_text[0]))
 
     # fill in the empty columns with data
-    df.xmin = xmin_list
-    df.ymin = ymin_list
-    df.xmax = xmax_list
-    df.ymax = ymax_list
+    df.xmin_coco = xmin_coco_list
+    df.ymin_coco = ymin_coco_list
+    df.xmax_coco = xmax_coco_list
+    df.ymax_coco = ymax_coco_list
+
+    # normalize bbox coordinates
+    df.xmin_alb = df.xmin_coco/df.width
+    df.ymin_alb = df.ymin_coco/df.height
+    df.xmax_alb = df.xmax_coco/df.width
+    df.ymax_alb = df.ymax_coco/df.height
+
     df.label = label_list
 
     # set cats:1 and dogs:0
@@ -98,5 +116,5 @@ if __name__ == "__main__":
         f"-- File {fname}.csv with {total_cats} cats and {total_dogs} dogs created in 'input' dir. --")
 
     # check the distribution of classes. Sum should be the same -> same number of cats in each fold
-    print(
-        f"Cats distribution between folds: {df.groupby(['kfold']).label.sum()}")
+    # print(
+        # f"Cats distribution between folds: {df.groupby(['kfold']).label.sum()}")
