@@ -1,10 +1,9 @@
-# data files for training
+# data files for training @ ../data
 data
+# csv data @ ../input
 input
+# trained models @ ../checkpoint
+checkpoint
 
-
-# a few helper nb
-notebooks
-
-# df with fnames, bbox coordinates and labels
-# train_data.csv
+# a few helper nb @ ../notebooks
+# notebooks

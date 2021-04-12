@@ -2,6 +2,9 @@ import os
 import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import StratifiedKFold
+import config
+
+# this function will create extra column in our df with kfold values
 
 
 def create_folds(data, n_splits=5, shuffle=True):
@@ -11,7 +14,7 @@ def create_folds(data, n_splits=5, shuffle=True):
         n_splits (int): number of KFold splits
         shuffle (bool, optional): whether shuffle the df on splits
     """
-
+    # we'll go for stratifiedKFold since there is an imbalance in classes
     kf = StratifiedKFold(n_splits=n_splits, shuffle=shuffle, random_state=1)
 
     # fetch labels
@@ -28,22 +31,15 @@ def create_folds(data, n_splits=5, shuffle=True):
 
 if __name__ == "__main__":
 
-    # we will populate this predefined table
+    # we will populate this predefined table later
     df = pd.DataFrame(columns=['fname', 'info', 'xmin',
                                'ymin', 'xmax', 'ymax', 'label'])
-
-    # setting paths
-    ROOT = Path.cwd().parent
-    # image data files
-    DATA = os.path.join(ROOT, 'data')
-    # dataframes for training
-    INPUT = os.path.join(ROOT, 'input')
 
     # walking image folder and constructing the df
     image_fnames = []
     image_info = []
 
-    for _, _, fnames in os.walk(DATA):
+    for _, _, fnames in os.walk(config.DATA):
         for fname in fnames:
             extension = fname.split(".")[-1].lower()
             # we will need full path + fname later
@@ -51,13 +47,14 @@ if __name__ == "__main__":
                 image_fnames.append(fname)
             # extract data from the txt file
             if extension == "txt":
-                FILE_PATH = os.path.join(DATA, fname)
+                FILE_PATH = os.path.join(config.DATA, fname)
                 with open(FILE_PATH) as file:
                     txt = file.readlines()
                     image_info.append(txt)
 
     # pushing the data collected with os.walk to the df
-    df['fname'] = [(os.path.join(DATA, fname)) for fname in image_fnames]
+    df['fname'] = [(os.path.join(config.DATA, fname))
+                   for fname in image_fnames]
     df['info'] = image_info
 
     # creating empty future columns' data
@@ -96,9 +93,10 @@ if __name__ == "__main__":
 
     # safe the new df
     fname = 'train_data'
-    df.to_csv(os.path.join(INPUT, fname + '.csv'))
+    df.to_csv(os.path.join(config.INPUT, fname + '.csv'))
     print(
-        f'File {fname}.csv with {total_cats} cats and {total_dogs} dogs created at working dir.')
+        f"-- File {fname}.csv with {total_cats} cats and {total_dogs} dogs created in 'input' dir. --")
 
     # check the distribution of classes. Sum should be the same -> same number of cats in each fold
-    # print(df.groupby(['kfold']).label.sum())
+    print(
+        f"Cats distribution between folds: {df.groupby(['kfold']).label.sum()}")
