@@ -33,7 +33,7 @@ def create_folds(data, n_splits=5, shuffle=True):
 if __name__ == "__main__":
 
     # we will populate this predefined table later
-    df = pd.DataFrame(columns=['fname', 'height', 'width', 'info', 
+    df = pd.DataFrame(columns=['fname', 'height', 'width', 'colors', 'info', 
                                'xmin_coco', 'ymin_coco', 'xmax_coco', 'ymax_coco',
                                'xmin_alb', 'ymin_alb', 'xmax_alb', 'ymax_alb', 
                                'label'])
@@ -43,6 +43,7 @@ if __name__ == "__main__":
     image_info = []
     image_height = []
     image_width = []
+    image_colors = []
 
     for _, _, fnames in os.walk(config.DATA):
         for fname in fnames:
@@ -51,9 +52,10 @@ if __name__ == "__main__":
             # we will need full path + fname later
             if extension == 'jpg':
                 img = cv2.imread(FILE_PATH)
-                h, w, _ = img.shape
+                h, w, c = img.shape
                 image_height.append(h)
                 image_width.append(w)
+                image_colors.append(c)
                 image_fnames.append(fname)
             # extract data from the txt file
             if extension == "txt":
@@ -67,6 +69,7 @@ if __name__ == "__main__":
     df['info'] = image_info
     df['height'] = image_height
     df['width'] = image_width
+    df['colors'] = image_colors
 
     # creating empty future columns' data
     xmin_coco_list = []

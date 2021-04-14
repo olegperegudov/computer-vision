@@ -55,6 +55,9 @@ def resnet18_5(output_layer=5):
     model.fc = nn.Linear(num_ftrs, output_layer)
     return model
 
+
 # model = vgg()
 # model = alexnet()
+# model = resnet18()
+# model = resnet18_5()
 # print(model)
