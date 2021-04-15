@@ -17,7 +17,8 @@ df = pd.read_csv(config.DF_PATH, usecols=['fname', 'height', 'width',
 idx = np.random.randint(df.shape[0])
 # take any row
 img_data = df.iloc[idx]
-# img_data = df.iloc[66]
+# use any index below
+# img_data = df.iloc[477]
 # image path
 path = img_data['fname']
 # open image
@@ -83,8 +84,11 @@ crop = 256
 
 transform = A.Compose([
     # A.SmallestMaxSize(presize),
-    A.RandomSizedBBoxSafeCrop(crop, crop),
-    A.RandomCrop(crop, crop),
+    # A.LongestMaxSize(presize),
+    A.RandomSizedBBoxSafeCrop(presize, presize),
+    # A.crops.transforms.CropAndPad(presize),
+    # A.RandomSizedBBoxSafeCrop(crop, crop),
+    # A.RandomCrop(crop, crop),
     # A.Normalize(),
     A.Rotate(limit=30),
     A.HorizontalFlip(p=0.5),
@@ -99,6 +103,9 @@ transform = A.Compose([
 transformed = transform(image=image,
                         bboxes=bboxes,
                         label=label)
+
+
+
 
 visualize(
     transformed['image'],
