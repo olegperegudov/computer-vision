@@ -10,23 +10,23 @@
 
 # Project structure:
 
-1. working dir with project name. Inside there are:
-- 'checkpoint' folder for trained models (will be created autimatically when you train your 1st model)
-- 'data' folder with all the data - images and txt files
-- 'input' folder for dataframe. This folder and the dataframe will be created ones you run 'df_preparation.py' from 'src' folder
-- 'notebooks' folder. It has some extra files used during this project. You can still run 'localization_engine.ipynb' and 'classification_engine.ipynb' from it. They are almost identical to their '...py' analogs in 'src'. This folder is not needed for anything
-- 'src' folder is the main folder to run all the scripts inside. 'src' folder is set as 'cwd' for all the scripts.
-- inside 'src' there are the following files:
-- 'check_bbox_with_transforms.py' - add/change transforms inside, display the result with bbox
-- 'check_predicted_bbox.py' - used to display a predicted bbox once you have a model. Will run full pipeline for a single image.
-- 'classification_engine.py' - will train and create classification model/checkpoint to predict class
-- 'config.py' - config file with (almost) all the parameters and paths
-- 'dataset.py' - custom dataset class
-- 'df_preparation.py' - this is the 1st script you run. It will 'walk' the 'data' folder and create the dataframe to use later
-- 'localization_engine.py' - will train and create localization model/checkpoint tol predict bboxes 
-- 'models.py' - different models I used for training. There are quite a few.
-- 'show_picture.py' - simple script to display an image from df using indexing
-- 'transforms.py' - all the transforms for all the engines
+- working dir with project name. Inside there are:
+- '**checkpoint**' folder for trained models (will be created autimatically when you train your 1st model)
+- '**data**' folder with all the data - images and txt files
+- '**input**' folder for dataframe. This folder and the dataframe will be created ones you run 'df_preparation.py' from 'src' folder
+- '**notebooks**' folder. It has some extra files used during this project. You can still run 'localization_engine.ipynb' and 'classification_engine.ipynb' from it. They are almost identical to their '...py' analogs in 'src'. This folder is not needed for anything
+- '**src**' folder is the main folder to run all the scripts inside. 'src' folder is set as 'cwd' for all the scripts.
+- inside '**src**' there are the following files:
+- '**check_bbox_with_transforms**.py' - add/change transforms inside, display the result with bbox
+- '**check_predicted_bbox**.py' - used to display a predicted bbox once you have a model. Will run full pipeline for a single image.
+- '**classification_engine**.py' - will train and create classification model/checkpoint to predict class
+- '**config**.py' - config file with (almost) all the parameters and paths
+- '**dataset**.py' - custom dataset class
+- '**df_preparation**.py' - this is the 1st script you run. It will 'walk' the 'data' folder and create the dataframe to use later
+- '**localization_engine**.py' - will train and create localization model/checkpoint tol predict bboxes 
+- '**models**.py' - different models I used for training. There are quite a few.
+- '**show_picture**.py' - simple script to display an image from df using indexing
+- '**transforms**.py' - all the transforms for all the engines
 
 # how to run the project:
 
