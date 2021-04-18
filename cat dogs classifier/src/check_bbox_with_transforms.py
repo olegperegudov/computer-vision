@@ -1,3 +1,8 @@
+'''
+Please provide index as input when running this script
+Used to check if transforms are at all adequate.
+'''
+
 import cv2
 import pandas as pd
 import numpy as np
@@ -10,17 +15,23 @@ import albumentations.pytorch
 import config
 
 # dataframe
-df = pd.read_csv(config.DF_PATH, usecols=['fname', 'height', 'width',
-                                          'xmin_coco', 'ymin_coco', 'xmax_coco', 'ymax_coco', 'label'])
+df = pd.read_csv(config.DF_PATH, usecols=['fname', 'height', 'width', 'xmin_coco', 'ymin_coco', 'xmax_coco', 'ymax_coco', 'label'])
 
-# chekc random picture
-idx = np.random.randint(df.shape[0])
-# take any row
+# fetch random index
+# idx = np.random.randint(df.shape[0])
+
+# input
+idx = int(input(f'Please provide a picture index between 0 and {df.shape[0]}: '))
+
+# pull image data with random index OR provide index below
 img_data = df.iloc[idx]
-# use any index below
+
+# you can provide index here
 # img_data = df.iloc[477]
+
 # image path
 path = img_data['fname']
+
 # open image
 image = cv2.imread(path)
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -60,6 +71,9 @@ def visualize_bbox(image, bboxes, class_name, color=BOX_COLOR, thickness=2):
 
 
 def visualize(image, bboxes, label, category_id_to_name):
+    '''
+    Visualize picture with the bbox.
+    '''
     image = image.copy()
     for bboxes, category_id in zip(bboxes, label):
         class_name = category_id_to_name[category_id]
@@ -70,24 +84,20 @@ def visualize(image, bboxes, label, category_id_to_name):
     plt.show()
 
 
-bboxes = [[x1, y1, x2, y2]]  # because there is for loop for the bboxes
-# print(f'bboxes: {bboxes}')
+# has to be list of lists because there is for loop for the bboxes
+bboxes = [[x1, y1, x2, y2]]
+# fetch image class
 label = [img_data.label]
-# print(f'label: {label}')
+# mapping used to display the class
 category_id_to_name = {1: 'cat', 0: 'dog'}
-# print(f'category_id_to_name: {category_id_to_name[label[0]]}')
 
 # WITH TRANSFORMS
-
-presize = 256
-crop = 256
 
 transform = A.Compose([
     # A.SmallestMaxSize(presize),
     # A.LongestMaxSize(presize),
-    A.RandomSizedBBoxSafeCrop(presize, presize),
+    A.RandomSizedBBoxSafeCrop(config.presize, config.presize),
     # A.crops.transforms.CropAndPad(presize),
-    # A.RandomSizedBBoxSafeCrop(crop, crop),
     # A.RandomCrop(crop, crop),
     # A.Normalize(),
     A.Rotate(limit=30),
@@ -103,8 +113,6 @@ transform = A.Compose([
 transformed = transform(image=image,
                         bboxes=bboxes,
                         label=label)
-
-
 
 
 visualize(

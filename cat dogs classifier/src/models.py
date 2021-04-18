@@ -42,7 +42,7 @@ def alexnet(input_layer):
 
     return model
 
-# might get handy
+# might use later
 class Identity(nn.Module):
     def __init__(self):
         super().__init__()

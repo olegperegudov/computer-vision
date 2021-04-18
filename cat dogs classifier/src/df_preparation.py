@@ -12,7 +12,7 @@ def create_folds(data, n_splits=5, shuffle=True):
     """Makes a copy of df with extra column at the end - "kfolds"
        and set fold's number in it.
     Args:
-        n_splits (int): number of KFold splits
+        n_splits (int, optional): number of KFold splits
         shuffle (bool, optional): whether shuffle the df on splits
     """
     # we'll go for stratifiedKFold since there is an imbalance in classes
@@ -33,9 +33,9 @@ def create_folds(data, n_splits=5, shuffle=True):
 if __name__ == "__main__":
 
     # we will populate this predefined table later
-    df = pd.DataFrame(columns=['fname', 'height', 'width', 'colors', 'info', 
+    df = pd.DataFrame(columns=['fname', 'height', 'width', 'colors', 'info',
                                'xmin_coco', 'ymin_coco', 'xmax_coco', 'ymax_coco',
-                               'xmin_alb', 'ymin_alb', 'xmax_alb', 'ymax_alb', 
+                               'xmin_alb', 'ymin_alb', 'xmax_alb', 'ymax_alb',
                                'label'])
 
     # walking image folder and constructing the df
@@ -113,11 +113,10 @@ if __name__ == "__main__":
     df = create_folds(data=df)
 
     # safe the new df
+    if not os.path.exists(config.INPUT):
+        os.mkdir(config.INPUT)
+
     fname = 'train_data'
     df.to_csv(os.path.join(config.INPUT, fname + '.csv'))
     print(
         f"-- File {fname}.csv with {total_cats} cats and {total_dogs} dogs created in 'input' dir. --")
-
-    # check the distribution of classes. Sum should be the same -> same number of cats in each fold
-    # print(
-        # f"Cats distribution between folds: {df.groupby(['kfold']).label.sum()}")
