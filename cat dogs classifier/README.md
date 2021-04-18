@@ -3,7 +3,7 @@
 ## Short overview of the solution:
 
 - there are 2 engines (training scripts) - classification and classification with localization
-- classification (classification_engine.py) will only classify images as dog or cat iage and will not predict bboxes at all
+- classification (classification_engine.py) will only classify images as dog or cat image and will not predict bboxes at all
 - classification with localization (localization_engine.py) will train a regression type model that will attempt to predict bboxes for cats' and dogs' faces.
 - I've used pretrained resnet18 for both tasks. It should be stated that this architecture is not in any way optimal and one will get much better results with other architectures, such as ssd, yolo, faster rccn etc. I used it resnet18 just for fun and see if it works at all for a regressiont ask. I have also tried other models: vgg, wide resnet, resnet 50, alexnet.
 - I have got ~93% accuracy (train/valid/test) and ~60% mIoU with ~15-20 epochs, where ~5 epochs were with frozen weights (except for the last layers) and the rest of the epochs were done with all the weights available for training. I'm sure it is possible to achieve better results with more epochs and some parameter tuning.
