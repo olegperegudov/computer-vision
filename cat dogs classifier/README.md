@@ -1,6 +1,6 @@
 # This is a dog vs cat classification and localization solution
 
-# Short overview of the solution:
+## Short overview of the solution:
 
 1. there are 2 engines (training scripts) - classification and classification with localization
 2. classification (classification_engine.py) will only classify images as dog or cat iage and will not predict bboxes at all
