@@ -18,7 +18,7 @@ import ttach as tta
 import models
 import config
 import dataset
-import classification_transforms
+import transforms
 
 # starting time
 start = time.time()
@@ -39,9 +39,9 @@ valid_df = df[df.kfold == 3].reset_index(drop=True)
 test_df = df[df.kfold == 4].reset_index(drop=True)
 
 # create datasets
-train_dataset = dataset.dataset(train_df, classification_transforms.train_transform)
-valid_dataset = dataset.dataset(valid_df, classification_transforms.valid_transform)
-test_dataset = dataset.dataset(test_df, classification_transforms.test_transform)
+train_dataset = dataset.dataset(train_df, transforms.train_transform_cls)
+valid_dataset = dataset.dataset(valid_df, transforms.valid_transform_cls)
+test_dataset = dataset.dataset(test_df, transforms.test_transform_cls)
 
 # create loaders
 train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=config.batch_size, shuffle=True)
@@ -229,7 +229,7 @@ if __name__ == "__main__":
         model, tta.aliases.five_crop_transform(config.tta_crop, config.tta_crop))
     # creating dataset
     tta_dataset = dataset.dataset(
-        valid_df, classification_transforms.tta_transform)
+        valid_df, transforms.tta_transform_cls)
     # creating the loder
     tta_loader = DataLoader(tta_dataset, batch_size=1, shuffle=False)
     # testing

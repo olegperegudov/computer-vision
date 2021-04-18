@@ -1,7 +1,9 @@
 # data files for training @ ../data
 data
+
 # csv data @ ../input
-input
+# input
+
 # trained models @ ../checkpoint
 checkpoint
 

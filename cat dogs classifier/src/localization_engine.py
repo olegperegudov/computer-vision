@@ -17,7 +17,7 @@ import time
 import models
 import config
 import dataset
-import localization_transforms
+import transforms
 
 # starting time
 start = time.time()
@@ -40,9 +40,9 @@ valid_df = df[df.kfold == 3].reset_index(drop=True)
 test_df = df[df.kfold == 4].reset_index(drop=True)
 
 # create dataset
-train_dataset = dataset.localization_dataset(train_df, localization_transforms.train_transform)
-valid_dataset = dataset.localization_dataset(valid_df, localization_transforms.valid_transform)
-test_dataset = dataset.localization_dataset(test_df, localization_transforms.test_transform)
+train_dataset = dataset.localization_dataset(train_df, transforms.train_transform_loc)
+valid_dataset = dataset.localization_dataset(valid_df, transforms.valid_transform_loc)
+test_dataset = dataset.localization_dataset(test_df, transforms.test_transform_loc)
 
 # create loaders
 train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=config.batch_size)
