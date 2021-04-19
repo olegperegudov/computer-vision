@@ -30,8 +30,7 @@ np.random.seed(0)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # IMPORTANT: this will only use a fraction of total available data. Set it to '1' in config to use all data
-df = pd.read_csv(config.DF_PATH, usecols=['fname',
-                                          'xmin_alb', 'ymin_alb', 'xmax_alb', 'ymax_alb',
+df = pd.read_csv(config.DF_PATH, usecols=['fname', 'xmin_alb', 'ymin_alb', 'xmax_alb', 'ymax_alb',
                                           'label', 'kfold']).sample(frac=config.frac).reset_index(drop=True)
 
 # create dataframes using folds we have got with "df_preparation.py"
