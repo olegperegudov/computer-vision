@@ -30,7 +30,7 @@
 
 # how to run the project:
 
-- you can run it as is at kaggle: https://www.kaggle.com/gobsan/cats-vs-dogs-bbox-localization?scriptVersionId=60241375
+- you can run it as is at kaggle: https://www.kaggle.com/gobsan/cats-vs-dogs-bbox-localization
   Just turn on gpu and run all. Should take ~9 mins. Or...
 - clone or dl repo from git
 - you will need all the data unpacked inside 'data' folder. Can be downloaded here: https://www.kaggle.com/gobsan/cats-and-dogs-bbox
