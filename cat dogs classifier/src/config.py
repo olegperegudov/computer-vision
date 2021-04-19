@@ -2,10 +2,10 @@ import os
 from pathlib import Path
 import models
 
-# all is located in project_dir = ../
-
 # --------------------------------PATHS--------------------------------
-# -
+
+# all is located in project_dir = ../
+# execute scripts from ../src
 
 # ../
 ROOT = Path.cwd().parent
@@ -34,7 +34,7 @@ model = models.resnet18(5)
 # model = models.wide_resnet50_2(5)
 # model = models.vgg(5)
 
-lr = 0.005  # learning rate
+lr = 0.01  # learning rate
 momentum = 0.9  # momentum
 weight_decay = 3e-3  # weight decay
 
@@ -47,7 +47,7 @@ presize = 256  # initial resize of the image
 crop = 224  # final crop of the image
 
 # batch size
-batch_size = 32
+batch_size = 64
 
 # n_epochs
 frozen = 1  # number of epochs trained with only last layer's params available for training

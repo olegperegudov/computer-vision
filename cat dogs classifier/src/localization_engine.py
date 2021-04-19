@@ -1,6 +1,6 @@
 '''
-This is CLASSIFICATION AND LOCALIZATION engine.
-It does the training, validation and testing.
+This is CLASSIFICATION WITH LOCALIZATION engine.
+It trains the model that can predict bboxes.
 '''
 
 import torch
@@ -44,9 +44,9 @@ valid_dataset = dataset.localization_dataset(valid_df, transforms.valid_transfor
 test_dataset = dataset.localization_dataset(test_df, transforms.test_transform_loc)
 
 # create loaders
-train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=config.batch_size)
-valid_loader = torch.utils.data.DataLoader(dataset=valid_dataset, batch_size=config.batch_size)
-test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=config.batch_size)
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=config.batch_size, shuffle=True)
+valid_loader = torch.utils.data.DataLoader(dataset=valid_dataset, batch_size=config.batch_size, shuffle=True)
+test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=config.batch_size, shuffle=True)
 
 # check if all is good with the shapes of the loaders
 assert next(iter(train_loader))[0].shape[0] == config.batch_size, 'Something is wrong with train loader'
@@ -91,16 +91,14 @@ def train_model(n_epochs=1,
                 criterion=criterion,
                 optimizer=optimizer,
                 lr_scheduler=lr_scheduler):
-
     '''
     Main function for training.
     '''
-
     # start total time
     total_time = time.time()
 
     for epoch in range(n_epochs):
-        # go train mode
+        # go to train mode
         model.train()
         # start epoch time
         t0 = time.time()
@@ -110,30 +108,47 @@ def train_model(n_epochs=1,
         epoch_loss = 0
 
         for batch, (images, labels) in enumerate(train_loader):
+
             # move images and labels to gpu, if available
-            images = images.to(device, non_blocking=True)
-            labels = labels.to(device, non_blocking=True)
+            images = images.to(device, non_blocking=True).float()
+            labels = labels.to(device, non_blocking=True).float()
+
             # keep track of total images in one epoch
-            total_num_images += labels.size(0)
+            total_num_images += images.size(0)
+
             # clear grads before forward pass
             optimizer.zero_grad()
-            outputs = model(images.float())
-            # we only need labels from (1,5) size tensor
-            preds = outputs[:, -1].round()
+
+            # calculate outputs
+            outputs = model(images)
+
+            # we only need labels from (1,5) size tensor (both outputs and labels tensor), which is last digit
+            preds = outputs[:, -1]
+            preds = torch.clip(preds, 0, 1).round()
+            true = labels[:, -1].round()
+
             # calculate the batch training loss
-            loss = criterion(labels.float(), outputs.float())
+            loss = criterion(outputs, labels)
+
             # keep track of total epoch loss
             epoch_loss += loss
+
             # correct on bacth
-            correct_on_batch = (preds == labels[:, -1]).sum().item()  # train acc
+            correct_on_batch = (preds == true).sum().item()
+
+            # debugging
+            # print(f'custom acc: {correct_on_batch/images.size(0)}')
+            # print(f'preds: {preds[:10]}')
+            # print(f'true: {true[:10]}')
+
             # correct on epoch
-            correct_on_epoch += correct_on_batch  # train acc
+            correct_on_epoch += correct_on_batch
             # backward pass and step
             loss.backward()
             optimizer.step()
 
         # train acc/loss
-        train_epoch_acc = round((correct_on_epoch/total_num_images), 4)  # train acc
+        train_epoch_acc = round((correct_on_epoch/total_num_images), 4)
         train_avg_epoch_loss = round(float(epoch_loss/len(train_loader)), 4)
         # valid acc/loss
         valid_avg_epoch_loss, valid_epoch_accuracy, mean_iou = test_model(model, valid_loader)
@@ -149,9 +164,8 @@ def train_model(n_epochs=1,
 
 
 def test_model(model, test_loader):
-
     '''
-    Main function for testing.
+    Main function for testing. Comments are almost identical to the train function.
     '''
     model.eval()
 
@@ -166,20 +180,25 @@ def test_model(model, test_loader):
 
         for batch, (images, labels) in enumerate(test_loader):
 
-            images = images.to(device, non_blocking=True)
-            labels = labels.to(device, non_blocking=True)
-            true_bb = labels[:, :-1]
+            images = images.to(device, non_blocking=True).float()
+            labels = labels.to(device, non_blocking=True).float()
 
             total_num_images += images.size(0)
 
             outputs = model(images)
-            preds = outputs[:, -1].round()
+
+            # preds and true are compared for valid accuracy
+            preds = outputs[:, -1]
+            preds = torch.clip(preds, 0, 1).round()
+            true = labels[:, -1]
+
+            true_bb = labels[:, :-1]
             pred_bb = outputs[:, :-1]
 
             loss = criterion(outputs, labels)
             epoch_loss += loss
 
-            correct_on_epoch += (preds == labels[:, -1]).sum().item()
+            correct_on_epoch += (preds == true).sum().item()
 
             # batch iou
             batch_iou = iou(true_bb, pred_bb)
@@ -218,7 +237,7 @@ def iou(true_bb, pred_bb):
             intersection_area = (xmax_intersect - xmin_intersect) * (ymax_intersect - ymin_intersect)
             union_area = (xmax_t-xmin_t)*(ymax_t-ymin_t)+(xmax_p-xmin_p)*(ymax_p-ymin_p)-intersection_area + 1e-6
 
-            assert intersection_area > 0, 'intersection area cat be < 0'
+            assert intersection_area > 0, 'intersection area cant be < 0'
             assert union_area > 0, 'union area cant be < 0'
 
             iou = intersection_area / union_area
