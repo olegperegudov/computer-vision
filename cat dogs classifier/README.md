@@ -30,9 +30,10 @@
 
 # how to run the project:
 
-- you can run it as is at kaggle. Just turn on gpu and run all. Should take ~9 mins. Or...
+- you can run it as is at kaggle: https://www.kaggle.com/gobsan/cats-vs-dogs-bbox-localization?scriptVersionId=60241375
+  Just turn on gpu and run all. Should take ~9 mins. Or...
 - clone or dl repo from git
-- you will need all the data unpacked inside 'data' folder. Can be downloaded here: https://www.kaggle.com/gobsan/cats-vs-dogs-bbox
+- you will need all the data unpacked inside 'data' folder. Can be downloaded here: https://www.kaggle.com/gobsan/cats-and-dogs-bbox
 - install all the dependencies (poetry)
 - from within the 'src' folder, run 'df_preparation.py'. It will create 'input folder' and place a df inside it
 - run 'classification_engine.py' for classification model or 'localization_engine.py' for localization model. Models will be places inside checkpoint folder (will be created if doesn't exist)
