@@ -1,4 +1,4 @@
-# This is a dog vs cat classification and localization solution
+# This is a dog vs cat classification and bbox localization solution
 
 ## Short overview of the solution:
 
