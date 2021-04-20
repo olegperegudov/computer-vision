@@ -212,7 +212,6 @@ def test_model(model, test_loader):
 
 
 def iou(true_bb, pred_bb):
-
     '''
     Main function for calculating Intersection over Union
     '''
@@ -221,22 +220,29 @@ def iou(true_bb, pred_bb):
 
     for idx, (true, pred) in enumerate(zip(true_bb, pred_bb)):
 
+        # we have to clip our bbox predictions between 0 and 1
         pred = torch.clip(pred, min=0.0, max=1.0).to('cpu')
+        # clipping true not necessary but I kept it for symmetry
         true = torch.clip(true, min=0.0, max=1.0).to('cpu')
 
+        # unpacking
         xmin_t, ymin_t, xmax_t, ymax_t = true
         xmin_p, ymin_p, xmax_p, ymax_p = pred
 
+        # here we 4 intersection points
         xmin_intersect = np.maximum(xmin_t, xmin_p)
         ymin_intersect = np.maximum(ymin_t, ymin_p)
         xmax_intersect = np.minimum(xmax_t, xmax_p)
         ymax_intersect = np.minimum(ymax_t, ymax_p)
 
+        # this condition will check if intersection points are real intersections
+        # if this condition fails, intersection area = 0
         if xmin_intersect < xmax_intersect and ymin_intersect < ymax_intersect:
 
             intersection_area = (xmax_intersect - xmin_intersect) * (ymax_intersect - ymin_intersect)
             union_area = (xmax_t-xmin_t)*(ymax_t-ymin_t)+(xmax_p-xmin_p)*(ymax_p-ymin_p)-intersection_area + 1e-6
 
+            # this is just sanity check
             assert intersection_area > 0, 'intersection area cant be < 0'
             assert union_area > 0, 'union area cant be < 0'
 
