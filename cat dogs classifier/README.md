@@ -1,7 +1,7 @@
 # This is a dog vs cat classification and bbox localization solution
 
 ## Short overview of the solution:
-
+- requested results: mIoU ~65%, classification accuracy 99%, 22s for 2031 train and 677 valid images (the other 677 images are left for test)
 - there are 2 engines (training scripts) - classification and classification with localization
 - classification (classification_engine.py) will only classify images as dog or cat image and will not predict bboxes at all
 - classification with localization (localization_engine.py) will train a regression type model that will attempt to predict bboxes for cats' and dogs' faces.
