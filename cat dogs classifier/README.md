@@ -13,7 +13,7 @@
 
 - working dir with project name. Inside there are:
 - '**checkpoint**' folder for trained models (will be created autimatically when you train your 1st model)
-- '**data**' folder with all the data - images and txt files
+- '**data**' folder with all the data - images and txt files. Can be downloaded here: https://www.kaggle.com/gobsan/cats-and-dogs-bbox
 - '**input**' folder for dataframe. This folder and the dataframe will be created ones you run 'df_preparation.py' from 'src' folder
 - '**notebooks**' folder. It has some extra files used during this project. You can still run 'localization_engine.ipynb' and 'classification_engine.ipynb' from it. They are almost identical to their '...py' analogs in 'src'. This folder is not needed for anything
 - '**src**' folder is the main folder to run all the scripts inside. 'src' folder is set as 'cwd' for all the scripts.
