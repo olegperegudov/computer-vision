@@ -1,18 +1,19 @@
-# This is a dog vs cat classification and localization solution
+# This is a dog vs cat classification and bbox localization solution
 
 ## Short overview of the solution:
 
 - there are 2 engines (training scripts) - classification and classification with localization
 - classification (classification_engine.py) will only classify images as dog or cat image and will not predict bboxes at all
 - classification with localization (localization_engine.py) will train a regression type model that will attempt to predict bboxes for cats' and dogs' faces.
-- I've used pretrained resnet18 for both tasks. It should be stated that this architecture is not in any way optimal and one will get much better results with other architectures, such as ssd, yolo, faster rccn etc. I used resnet18 just for fun and see if it works at all for a regressiont ask. I have also tried other models: vgg, wide resnet, resnet 50, alexnet.
+- I've used pretrained resnet18 for both tasks. It should be stated that this architecture is not in any way optimal and one will get much better results with other architectures, such as ssd, yolo, faster rccn etc. I used resnet18 just for fun and see if it works at all for a regressiont task. I have also experimented with other models: vgg, wide resnet, resnet 50, alexnet (can be found in models.py).
 - I have got ~99% accuracy (train/valid/test) and ~65% mIoU with ~18 epochs, where ~3 epochs were with frozen weights (except for the last layers) and the rest of the epochs were done with all the weights available for training.
+- total run time with epochs mentioned above ~9min with decent GPU. I run it in colab and kaggle. And locally on CPU (with a fraction of the data and fewer epochs).
 
 # Project structure:
 
 - working dir with project name. Inside there are:
 - '**checkpoint**' folder for trained models (will be created autimatically when you train your 1st model)
-- '**data**' folder with all the data - images and txt files
+- '**data**' folder with all the data - images and txt files. Can be downloaded here: https://www.kaggle.com/gobsan/cats-and-dogs-bbox
 - '**input**' folder for dataframe. This folder and the dataframe will be created ones you run 'df_preparation.py' from 'src' folder
 - '**notebooks**' folder. It has some extra files used during this project. You can still run 'localization_engine.ipynb' and 'classification_engine.ipynb' from it. They are almost identical to their '...py' analogs in 'src'. This folder is not needed for anything
 - '**src**' folder is the main folder to run all the scripts inside. 'src' folder is set as 'cwd' for all the scripts.
@@ -23,7 +24,7 @@
 - '**config**.py' - config file with (almost) all the parameters and paths
 - '**dataset**.py' - custom dataset class
 - '**df_preparation**.py' - this is the 1st script you run. It will 'walk' the 'data' folder and create the dataframe to use later
-- '**localization_engine**.py' - will train and create localization model/checkpoint tol predict bboxes 
+- '**localization_engine**.py' - will train and create localization model/checkpoint to predict bboxes 
 - '**models**.py' - different models I used for training. There are quite a few.
 - '**show_picture**.py' - simple script to display an image from df using indexing
 - '**transforms**.py' - all the transforms for all the engines
