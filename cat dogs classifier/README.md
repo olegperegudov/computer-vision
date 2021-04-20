@@ -24,7 +24,7 @@
 - '**config**.py' - config file with (almost) all the parameters and paths
 - '**dataset**.py' - custom dataset class
 - '**df_preparation**.py' - this is the 1st script you run. It will 'walk' the 'data' folder and create the dataframe to use later
-- '**localization_engine**.py' - will train and create localization model/checkpoint tol predict bboxes 
+- '**localization_engine**.py' - will train and create localization model/checkpoint to predict bboxes 
 - '**models**.py' - different models I used for training. There are quite a few.
 - '**show_picture**.py' - simple script to display an image from df using indexing
 - '**transforms**.py' - all the transforms for all the engines
