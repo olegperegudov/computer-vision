@@ -10,7 +10,7 @@
 - total run time with epochs mentioned above ~9min with decent GPU. I run it in colab and kaggle. And locally on CPU (with a fraction of the data and fewer epochs).
 
 # Project structure:
-
+![alt text](https://github.com/olegperegudov/computer-vision/blob/master/cat%20dogs%20classifier/project%20structure.png)
 - working dir with project name. Inside there are:
 - '**checkpoint**' folder for trained models (will be created autimatically when you train your 1st model)
 - '**data**' folder with all the data - images and txt files. Can be downloaded here: https://www.kaggle.com/gobsan/cats-and-dogs-bbox
