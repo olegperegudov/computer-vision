@@ -225,7 +225,7 @@ def iou(true_bb, pred_bb):
         # clipping true not necessary but I kept it for symmetry
         true = torch.clip(true, min=0.0, max=1.0).to('cpu')
 
-        # unpacking
+        # unpacking coordinates
         xmin_t, ymin_t, xmax_t, ymax_t = true
         xmin_p, ymin_p, xmax_p, ymax_p = pred
 
